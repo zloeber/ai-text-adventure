@@ -55,8 +55,8 @@ const config: { [key: string]: ProviderConfig } = {
     function: groqRequest as any, // Casting to any to bypass TypeScript complaints temporarily
   },
   chatgpt: {
-    model: "gpt-4.0-turbo",
-    url: "https://api.openai.com/v1/engines/gpt-4.0-turbo/completions",
+    model: "gpt-4-turbo",
+    url: "https://api.openai.com/v1/chat/completions",
     apiKey: "",
     function: chatgptRequest,
   },
@@ -72,13 +72,21 @@ const config: { [key: string]: ProviderConfig } = {
 const request = async (
   prompt: string,
   apiKey: string,
-  provider: string
+  provider: string,
+  customUrl?: string,
+  customModel?: string
 ): Promise<string[]> => {
   const providerConfig = config[provider];
   if (!providerConfig) {
     throw new Error("Unsupported provider");
   }
   providerConfig.apiKey = apiKey || providerConfig.apiKey;
+  if (customUrl) {
+    providerConfig.url = customUrl;
+  }
+  if (customModel) {
+    providerConfig.model = customModel;
+  }
   return providerConfig.function(prompt, providerConfig);
 };
 
@@ -170,17 +178,25 @@ async function chatgptRequest(
     "Content-Type": "application/json",
   };
 
+  // Use chat completions format for OpenAI-compatible APIs (including Ollama)
   const data = {
     model: model,
-    prompt: prompt,
-    // max_tokens: 150,
+    messages: [
+      { role: "system", content: "JSON" },
+      { role: "user", content: prompt },
+    ],
     temperature: 0.7,
-    // stop: ["\n", "<|endoftext|>"]
+    response_format: { type: "json_object" },
   };
 
   try {
     const response: AxiosResponse = await axios.post(url!, data, { headers });
-    return response.data.choices.map((choice: any) => choice.text);
+    // Handle both chat completions format and legacy completions format
+    if (response.data.choices[0].message) {
+      return response.data.choices.map((choice: any) => choice.message.content);
+    } else {
+      return response.data.choices.map((choice: any) => choice.text);
+    }
   } catch (error: any) {
     if (error.response && error.response.status === 429) {
       console.log("Rate limit exceeded, retrying in 3 seconds...");

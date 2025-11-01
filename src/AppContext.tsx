@@ -33,6 +33,8 @@ type AppState = {
   isFinal: boolean;
   apiKey: string;
   provider: string;
+  customUrl?: string;
+  customModel?: string;
   nextPartOfStory: string;
   previousParagraph: string;
   tempOptions: { [key: string]: string };
@@ -73,6 +75,8 @@ const AppContext = createContext<AppContextType>({
     isFinal: false,
     apiKey: "",
     provider: "",
+    customUrl: "",
+    customModel: "",
     nextPartOfStory: "",
     previousParagraph: "",
     tempOptions: {},
@@ -114,6 +118,8 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     isFinal: false,
     apiKey: "",
     provider: "",
+    customUrl: "",
+    customModel: "",
     nextPartOfStory: "",
     previousParagraph: "",
     tempOptions: {},

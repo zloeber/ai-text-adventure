@@ -12,6 +12,8 @@ const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
     chosenImage,
     apiKey,
     provider,
+    customUrl,
+    customModel,
     storyStart,
   } = state;
 
@@ -28,7 +30,9 @@ const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
           chosenCharacter,
           chosenImage,
           apiKey,
-          provider
+          provider,
+          customUrl,
+          customModel
         );
         setState((prevState) => ({
           ...prevState,
@@ -50,12 +54,16 @@ const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
           characterBio,
           characterGender,
           apiKey,
-          provider
+          provider,
+          customUrl,
+          customModel
         );
         const storySummary = await fetchStorySummary(
           storyStart,
           apiKey,
-          provider
+          provider,
+          customUrl,
+          customModel
         );
         // console.log("Story summary: " + storySummary);
         setState((prevState) => ({

@@ -7,6 +7,8 @@ const APIKeyInput: React.FC = () => {
   const { state, setState } = useContext(AppContext);
   const [apiKey, setApiKey] = useState<string>("");
   const [provider, setProvider] = useState<string>("groq"); // Default provider set
+  const [customUrl, setCustomUrl] = useState<string>("");
+  const [customModel, setCustomModel] = useState<string>("");
 
   // List of providers available for selection
   const providers = [
@@ -17,7 +19,14 @@ const APIKeyInput: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setState({ ...state, apiKey, provider, gameState: "loadOrCreate" });
+    setState({ 
+      ...state, 
+      apiKey, 
+      provider, 
+      customUrl: customUrl || undefined,
+      customModel: customModel || undefined,
+      gameState: "loadOrCreate" 
+    });
   };
 
   return (
@@ -43,6 +52,24 @@ const APIKeyInput: React.FC = () => {
               </option>
             ))}
           </select>
+          {provider === "chatgpt" && (
+            <>
+              <input
+                type="text"
+                placeholder="Custom URL (optional, e.g., http://localhost:11434/v1/chat/completions)"
+                value={customUrl}
+                onChange={(event) => setCustomUrl(event.target.value)}
+                autoComplete="off"
+              />
+              <input
+                type="text"
+                placeholder="Custom Model (optional, e.g., llama2)"
+                value={customModel}
+                onChange={(event) => setCustomModel(event.target.value)}
+                autoComplete="off"
+              />
+            </>
+          )}
           <button type="submit">Submit</button>
         </form>
         <p>
