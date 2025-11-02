@@ -26,7 +26,9 @@ const fetchEndingStoryPartAndOptions = async (
   characterBio: string,
   characterGender: string,
   apiKey: string,
-  provider: string
+  provider: string,
+  customUrl?: string,
+  customModel?: string
 ): Promise<NextStoryPart> => {
   const formatStorySummary = (storySummary: string[]): string => {
     return storySummary
@@ -74,7 +76,7 @@ const fetchEndingStoryPartAndOptions = async (
 
   while (!success) {
     try {
-      response = await chatGPTRequest(prompt, apiKey, provider);
+      response = await chatGPTRequest(prompt, apiKey, provider, customUrl, customModel);
       responseObject = processJson<NextStoryPart>(response[0]);
 
       const filteredOptions = filterOptionsNew(responseObject.options);
@@ -93,7 +95,9 @@ const fetchEndingStoryPartAndOptions = async (
 const fetchDetailedStorySummary = async (
   storySummary: string[],
   apiKey: string,
-  provider: string
+  provider: string,
+  customUrl?: string,
+  customModel?: string
 ): Promise<StorySummary> => {
   const formatStorySummary = (storySummary: string[]): string => {
     return storySummary
@@ -133,7 +137,7 @@ Please format the responses like this, ready to be shared and enjoyed on social 
 
   while (!success) {
     try {
-      response = await chatGPTRequest(prompt, apiKey, provider);
+      response = await chatGPTRequest(prompt, apiKey, provider, customUrl, customModel);
       responseObject = processJson<StorySummary>(response[0]);
       success = true;
     } catch (error) {

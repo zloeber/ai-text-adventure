@@ -17,7 +17,9 @@ const fetchNextStoryPartAndOptions = async (
   characterBio: string,
   characterGender: string,
   apiKey: string,
-  provider: string
+  provider: string,
+  customUrl?: string,
+  customModel?: string
 ): Promise<NextStoryPart> => {
   const prompt1 = `
   You're an AI continuing our text adventure game featuring "${chosenCharacter}", who is ${characterGender}, in the genre "${chosenGenre}". They have traits like "${characterTraits.join(
@@ -50,7 +52,7 @@ const fetchNextStoryPartAndOptions = async (
 
   while (true) {
     try {
-      const response = await chatGPTRequest(prompt1, apiKey, provider);
+      const response = await chatGPTRequest(prompt1, apiKey, provider, customUrl, customModel);
       const responseObject: NextStoryPart = processJson<NextStoryPart>(
         response[0]
       );
@@ -68,7 +70,9 @@ const fetchNextStoryPartAndOptions = async (
 const fetchStorySummary = async (
   storySegment: string,
   apiKey: string,
-  provider: string
+  provider: string,
+  customUrl?: string,
+  customModel?: string
 ): Promise<string> => {
   const prompt2 = `
     Write a concise summary of this story segment "${storySegment}" in one paragraph no more than 40 words. The summary should include:
@@ -88,7 +92,7 @@ const fetchStorySummary = async (
 
   while (true) {
     try {
-      const response = await chatGPTRequest(prompt2, apiKey, provider);
+      const response = await chatGPTRequest(prompt2, apiKey, provider, customUrl, customModel);
       const responseObject = processJson<{ storySummary: string }>(response[0]);
       return responseObject.storySummary; // Return summary on success
     } catch (error: any) {

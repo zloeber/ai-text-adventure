@@ -18,7 +18,9 @@ const fetchStoryStart = async (
   characterBio: string,
   characterGender: string,
   apiKey: string,
-  provider: string
+  provider: string,
+  customUrl?: string,
+  customModel?: string
 ): Promise<StartOfStory> => {
   // const prompt1 = `
   // Please read the following instructions carefully before proceeding:
@@ -91,7 +93,7 @@ const fetchStoryStart = async (
 
   while (attempts < maxAttempts) {
     try {
-      const response = await chatGPTRequest(prompt1, apiKey, provider);
+      const response = await chatGPTRequest(prompt1, apiKey, provider, customUrl, customModel);
       const responseObject: StartOfStory = processJson<StartOfStory>(
         response[0]
       );
@@ -110,7 +112,9 @@ const fetchStoryStart = async (
 const fetchStorySummary = async (
   storyStart: string,
   apiKey: string,
-  provider: string
+  provider: string,
+  customUrl?: string,
+  customModel?: string
 ): Promise<string> => {
   const prompt2 = `
   Given the following story start: "${storyStart}", write a concise summary of the opening story segment in one paragraph. The summary should include:
@@ -132,7 +136,7 @@ const fetchStorySummary = async (
 
   while (attempts < maxAttempts) {
     try {
-      const response = await chatGPTRequest(prompt2, apiKey, provider);
+      const response = await chatGPTRequest(prompt2, apiKey, provider, customUrl, customModel);
       const responseObject = processJson<{ newStorySummary: string }>(
         response[0]
       );

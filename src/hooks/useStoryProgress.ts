@@ -28,6 +28,8 @@ const useStoryProgress = () => {
     characterGender,
     apiKey,
     provider,
+    customUrl,
+    customModel,
     turnCount,
   } = state;
 
@@ -52,7 +54,9 @@ const useStoryProgress = () => {
           characterBio,
           characterGender,
           apiKey,
-          provider
+          provider,
+          customUrl,
+          customModel
         );
         storySegment = response.storySegment;
         options = response.options;
@@ -62,7 +66,9 @@ const useStoryProgress = () => {
           wrapUpDetails = await fetchDetailedStorySummary(
             storySummary,
             apiKey,
-            provider
+            provider,
+            customUrl,
+            customModel
           );
         }
       } else {
@@ -76,7 +82,9 @@ const useStoryProgress = () => {
           characterBio,
           characterGender,
           apiKey,
-          provider
+          provider,
+          customUrl,
+          customModel
         );
         storySegment = response.storySegment;
         options = response.options;
@@ -85,7 +93,9 @@ const useStoryProgress = () => {
       const newStorySummary = await fetchStorySummary(
         storySegment,
         apiKey,
-        provider
+        provider,
+        customUrl,
+        customModel
       );
 
       setState((prevState) => ({

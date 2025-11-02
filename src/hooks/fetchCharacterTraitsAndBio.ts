@@ -14,7 +14,9 @@ const fetchCharacterTraitsAndBio = async (
   chosenCharacter: string,
   chosenImage: string,
   apiKey: string,
-  provider: string
+  provider: string,
+  customUrl?: string,
+  customModel?: string
 ) => {
   const maxWords = 70;
   const characterTraitsAndBioPrompt = `
@@ -40,7 +42,9 @@ const fetchCharacterTraitsAndBio = async (
   const fetchedCharacterTraitsAndBio = await chatGPTRequest(
     characterTraitsAndBioPrompt,
     apiKey,
-    provider
+    provider,
+    customUrl,
+    customModel
   );
   const characterData: CharacterData = processJson<CharacterData>(
     fetchedCharacterTraitsAndBio[0]
